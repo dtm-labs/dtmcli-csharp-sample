@@ -16,7 +16,7 @@ dotnet run DtmTccSample.csproj
 ```
 ### 运行示例
 
-使用浏览器访问 http://192.168.5.9:5000/swagger/index.html
+使用浏览器访问 http://xxxxxx:5000/swagger/index.html
 
 执行 ​/api​/Home​/Demo
 
@@ -24,7 +24,7 @@ dotnet run DtmTccSample.csproj
 核心代码如下，示例开启一个tcc全局事务，然后在事务内部注册并调用TransOut和TransIn 分支，完成后返回，剩下的二阶段Comfirm，会由DTM完成
 ```C# 
 
-var svc = "http://192.168.5.9:5000/api";
+var svc = "http://xxxxxxx:5000/api";
 TransRequest request = new TransRequest() { Amount = 30 };
 var cts = new CancellationTokenSource();
 // 开启一个tcc全局事务   
