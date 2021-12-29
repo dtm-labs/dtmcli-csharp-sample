@@ -5,8 +5,8 @@ dtmcli c# 使用示例
 ### 部署启动dtm
 需要docker版本20.04以上
 ```
-git clone https://github.com/yedf/dtm
-cd dtm
+git clone https://github.com/dtm-labs/dtm
+cd dtm && git checkout v1.7.5
 docker-compose up
 ```
 ### 启动示例
