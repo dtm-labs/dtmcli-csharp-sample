@@ -1,0 +1,40 @@
+version: '3.3'
+services:
+  dtm:
+    image: 'yedf/dtm:1.10'
+    container_name: dtm-csharp
+    environment:
+      IS_DOCKER: '1'
+    ports:
+      - '36789:36789'
+      - '36790:36790'
+    # command: ['/app/dtm/main', 'dev']
+    # working_dir: /app/work
+  sample:
+    depends_on:
+      - dtm
+      - db
+    build:
+      dockerfile: ./docker/sample/Dockerfile
+      context: . 
+    image: sample:1.0.0
+    container_name: dtm-csharp-sample
+    ports:
+      - "9090:9090"  
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development  
+  db:
+    image: 'mysql:8'
+    container_name: dtm-csharp-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    command:
+      [
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci',
+        '--default-authentication-plugin=mysql_native_password',
+      ]
+    volumes:
+      - ./docker/mysql/scripts:/docker-entrypoint-initdb.d  
+    ports:
+      - '3306:3306'
