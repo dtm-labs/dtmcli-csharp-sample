@@ -2,38 +2,31 @@
 dtmcli c# 使用示例
 
 ## 快速开始
+
 ### 部署启动dtm
 需要docker版本20.04以上
 ```
 git clone https://github.com/dtm-labs/dtm
-cd dtm && git checkout v1.7.5
+cd dtm && git checkout v1.10.0
 docker-compose up
 ```
+
 ### 启动示例
 ```
-cd DtmTccSample
-dotnet run DtmTccSample.csproj
+cd DtmSample
+dotnet run DtmSample.csproj
 ```
-### 运行示例
 
-使用浏览器访问 http://xxxxxx:5000/swagger/index.html
+这个时候通过浏览器打开 `http://localhost:9090` 会跳转到 swagger 页面，可以选择性的测试对应类型的事务模式。
 
-执行 ​/api​/Home​/Demo
+> 根据情况，调整一下 `appsettins.json` 文件，换成对应的配置值之后，再运行示例。
 
-### 示例解读
-核心代码如下，示例开启一个tcc全局事务，然后在事务内部注册并调用TransOut和TransIn 分支，完成后返回，剩下的二阶段Comfirm，会由DTM完成
-```C# 
+### 其他
 
-var svc = "http://xxxxxxx:5000/api";
-TransRequest request = new TransRequest() { Amount = 30 };
-var cts = new CancellationTokenSource();
-// 开启一个tcc全局事务   
-await globalTransaction.Excecute(async (tcc) =>
-{
-     //调用TransOut分支，四个参数分别为post的body，tryUrl, confirmUrl, cancelUrl
-      await tcc.CallBranch(request, svc + "/TransOut/Try", svc + "/TransOut/Confirm", svc + "/TransOut/Cancel", cts.Token);
-      //调用TransIn分支
-      await tcc.CallBranch(request, svc + "/TransIn/Try", svc + "/TransIn/Confirm", svc + "/TransIn/Cancel",cts.Token);
-    }, cts.Token);
-}
-```
+当然，您也可以通过执行 `runsample.ps1` 来快速运行示例代码。
+
+它会通过 **docker-compose** 启动 dtm，mysql(演示子事务屏障)，dtmsample
+
+启动后，可以看到类似下面的输出
+
+![](./media/run.png)
