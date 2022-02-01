@@ -33,7 +33,7 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("BarrierTransOutTry, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
@@ -53,7 +53,7 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("BarrierTransOutConfirm, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
@@ -73,7 +73,7 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("BarrierTransOutCancel, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
@@ -93,7 +93,7 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("BarrierTransInTry, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
@@ -133,7 +133,7 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("BarrierTransInConfirm, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
@@ -153,7 +153,7 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("BarrierTransInCancel, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
@@ -175,7 +175,7 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("barrierTransOutSaga, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
@@ -194,8 +194,8 @@ namespace DtmSample.Controllers
           [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
         {
             _logger.LogInformation("barrierTransOutSagaRevert, QueryString={0}", Request.QueryString);
-
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
@@ -237,7 +237,7 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("BarrierTransInSagaRevert, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
-            var branchBarrier = _barrierFactory.CreateBranchBarrier(trans_type, gid, branch_id, op);
+            var branchBarrier = _barrierFactory.CreateBranchBarrier(Request.Query);
 
             using (MySqlConnection conn = GetBarrierConn())
             {
