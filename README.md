@@ -7,7 +7,7 @@ dtmcli c# 使用示例
 需要docker版本20.04以上
 ```
 git clone https://github.com/dtm-labs/dtm
-cd dtm && git checkout v1.10.0
+cd dtm && git checkout v1.11.0
 docker-compose up
 ```
 

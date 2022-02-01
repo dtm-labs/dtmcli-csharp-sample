@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   dtm:
-    image: 'yedf/dtm:1.10'
+    image: 'yedf/dtm:1.11'
     container_name: dtm-csharp
     environment:
       IS_DOCKER: '1'
@@ -23,6 +23,7 @@ services:
       - "9090:9090"  
     environment:
       ASPNETCORE_ENVIRONMENT: Development  
+      Logging__Console__FormatterName:
   db:
     image: 'mysql:8'
     container_name: dtm-csharp-mysql
