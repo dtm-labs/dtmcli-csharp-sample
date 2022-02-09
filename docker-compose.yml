@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   dtm:
-    image: 'yedf/dtm:1.11'
+    image: 'yedf/dtm:1.12'
     container_name: dtm-csharp
     environment:
       IS_DOCKER: '1'
@@ -22,7 +22,7 @@ services:
     ports:
       - "9090:9090"  
     environment:
-      ASPNETCORE_ENVIRONMENT: Development  
+      ASPNETCORE_ENVIRONMENT: docker  
       Logging__Console__FormatterName:
   db:
     image: 'mysql:8'
