@@ -12,6 +12,8 @@ namespace DtmSample.Controllers
     /// <summary>
     /// MSG 示例
     /// </summary>
+    [ApiController]
+    [Route("/api")]
     public class MsgTestController : ControllerBase
     {
         private readonly ILogger<MsgTestController> _logger;
@@ -29,12 +31,14 @@ namespace DtmSample.Controllers
 
         private MySqlConnection GetConn() => new(_settings.BarrierConn);
 
+        private MySqlConnection GetErrConn() => new("");
+
         /// <summary>
         /// MSG 常规成功
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPost("saga")]
+        [HttpPost("msg")]
         public async Task<IActionResult> Msg(CancellationToken cancellationToken)
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
@@ -68,7 +72,7 @@ namespace DtmSample.Controllers
             var msg = new Msg(_dtmClient, gid)
                 .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
-            
+
             using (MySqlConnection conn = GetConn())
             {
                 var flag = await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
@@ -121,10 +125,37 @@ namespace DtmSample.Controllers
 
             using (MySqlConnection conn = GetConn())
             {
-                var res = bb.QueryPrepared(conn);
+                var res = await bb.QueryPrepared(conn);
 
                 return Ok(new { dtm_result = res });
             }
+        }
+
+        /// <summary>
+        /// MSG DB 回滚
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPost("msg-db-rb")]
+        public async Task<IActionResult> MsgDbRb(CancellationToken cancellationToken)
+        {
+            var gid = await _dtmClient.GenGid(cancellationToken);
+
+            var msg = new Msg(_dtmClient, gid)
+                .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
+                .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
+
+            using (MySqlConnection conn = GetErrConn())
+            {
+                var flag = await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
+                {
+                    await Task.CompletedTask;
+                });
+
+                _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
+            }
+
+            return Ok(TransResponse.BuildSucceedResponse());
         }
     }
 }
