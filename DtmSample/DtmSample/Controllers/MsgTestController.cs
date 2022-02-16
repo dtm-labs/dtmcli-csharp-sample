@@ -19,14 +19,16 @@ namespace DtmSample.Controllers
         private readonly ILogger<MsgTestController> _logger;
         private readonly IDtmClient _dtmClient;
         private readonly IBranchBarrierFactory _factory;
+        private readonly IDtmTransFactory _transFactory;
         private readonly AppSettings _settings;
 
-        public MsgTestController(ILogger<MsgTestController> logger, IOptions<AppSettings> optionsAccs, IDtmClient dtmClient, IBranchBarrierFactory factory)
+        public MsgTestController(ILogger<MsgTestController> logger, IOptions<AppSettings> optionsAccs, IDtmClient dtmClient, IBranchBarrierFactory factory, IDtmTransFactory transFactory)
         {
             _logger = logger;
             _settings = optionsAccs.Value;
             _factory = factory;
             _dtmClient = dtmClient;
+            _transFactory = transFactory;
         }
 
         private MySqlConnection GetConn() => new(_settings.BarrierConn);
@@ -43,7 +45,7 @@ namespace DtmSample.Controllers
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
 
-            var msg = new Msg(_dtmClient, gid)
+            var msg = _transFactory.NewMsg(gid)
                 .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
 
@@ -69,7 +71,7 @@ namespace DtmSample.Controllers
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
 
-            var msg = new Msg(_dtmClient, gid)
+            var msg = _transFactory.NewMsg(gid)
                 .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
 
@@ -96,7 +98,7 @@ namespace DtmSample.Controllers
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
 
-            var msg = new Msg(_dtmClient, gid)
+            var msg = _transFactory.NewMsg(gid)
                 .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30))
                 .EnableWaitResult();
@@ -141,7 +143,7 @@ namespace DtmSample.Controllers
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
 
-            var msg = new Msg(_dtmClient, gid)
+            var msg = _transFactory.NewMsg(gid)
                 .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
 

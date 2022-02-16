@@ -18,13 +18,15 @@ namespace DtmSample.Controllers
     {
         private readonly ILogger<SagaTestController> _logger;
         private readonly IDtmClient _dtmClient;
+        private readonly IDtmTransFactory _transFactory;
         private readonly AppSettings _settings;
 
-        public SagaTestController(ILogger<SagaTestController> logger, IOptions<AppSettings> optionsAccs, IDtmClient dtmClient)
+        public SagaTestController(ILogger<SagaTestController> logger, IOptions<AppSettings> optionsAccs, IDtmClient dtmClient, IDtmTransFactory transFactory)
         {
             _logger = logger;
             _settings = optionsAccs.Value;
             _dtmClient = dtmClient;
+            _transFactory = transFactory;
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace DtmSample.Controllers
         public async Task<IActionResult> Saga(CancellationToken cancellationToken)
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
-            var saga = new Saga(this._dtmClient, gid)
+            var saga = _transFactory.NewSaga(gid)
                 .Add(_settings.BusiUrl + "/TransOut", _settings.BusiUrl + "/TransOutRevert", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", _settings.BusiUrl + "/TransInRevert", new TransRequest("2", 30))
                 ;
@@ -57,7 +59,7 @@ namespace DtmSample.Controllers
         public async Task<IActionResult> SagaCancel(CancellationToken cancellationToken)
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
-            var saga = new Saga(this._dtmClient, gid)
+            var saga = _transFactory.NewSaga(gid)
                 .Add(_settings.BusiUrl + "/TransOutError", _settings.BusiUrl + "/TransOutRevert", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", _settings.BusiUrl + "/TransInRevert", new TransRequest("2", 30))
                 ;
@@ -78,7 +80,7 @@ namespace DtmSample.Controllers
         public async Task<IActionResult> SagaWaitResult(CancellationToken cancellationToken)
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
-            var saga = new Saga(this._dtmClient, gid)
+            var saga = _transFactory.NewSaga(gid)
                 .Add(_settings.BusiUrl + "/TransOut", _settings.BusiUrl + "/TransOutRevert", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", _settings.BusiUrl + "/TransInRevert", new TransRequest("2", 30))
                 .EnableWaitResult()
@@ -100,7 +102,7 @@ namespace DtmSample.Controllers
         public async Task<IActionResult> SagaMulti(CancellationToken cancellationToken)
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
-            var saga = new Saga(this._dtmClient, gid)
+            var saga = _transFactory.NewSaga(gid)
                 .Add(_settings.BusiUrl + "/TransOut", _settings.BusiUrl + "/TransOutRevert", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransOut", _settings.BusiUrl + "/TransOutRevert", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", _settings.BusiUrl + "/TransInRevert", new TransRequest("2", 30))
@@ -126,7 +128,7 @@ namespace DtmSample.Controllers
         public async Task<IActionResult> SagaBarrier(CancellationToken cancellationToken)
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
-            var saga = new Saga(this._dtmClient, gid)
+            var saga = _transFactory.NewSaga(gid)
                 .Add(_settings.BusiUrl + "/barrierTransOutSaga", _settings.BusiUrl + "/barrierTransOutSagaRevert", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/barrierTransInSaga", _settings.BusiUrl + "/barrierTransInSagaRevert", new TransRequest("2", 30))
                 ;
