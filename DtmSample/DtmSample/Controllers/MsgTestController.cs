@@ -49,14 +49,10 @@ namespace DtmSample.Controllers
                 .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
 
-            var flag = await msg.Prepare(_settings.BusiUrl + "/msg-queryprepared", cancellationToken);
+            await msg.Prepare(_settings.BusiUrl + "/msg-queryprepared", cancellationToken);
+            await msg.Submit(cancellationToken);
 
-            if (flag)
-            {
-                flag = await msg.Submit(cancellationToken);
-            }
-
-            _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
+            _logger.LogInformation("result gid is {0}", gid);
 
             return Ok(TransResponse.BuildSucceedResponse());
         }
@@ -77,13 +73,13 @@ namespace DtmSample.Controllers
 
             using (MySqlConnection conn = GetConn())
             {
-                var flag = await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
+                await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
                 {
                     await Task.CompletedTask;
                 });
-
-                _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
             }
+
+            _logger.LogInformation("result gid is {0}", gid);
 
             return Ok(TransResponse.BuildSucceedResponse());
         }
@@ -103,14 +99,10 @@ namespace DtmSample.Controllers
                 .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30))
                 .EnableWaitResult();
 
-            var flag = await msg.Prepare(_settings.BusiUrl + "/msg-queryprepared", cancellationToken);
+            await msg.Prepare(_settings.BusiUrl + "/msg-queryprepared", cancellationToken);
+            await msg.Submit(cancellationToken);
 
-            if (flag)
-            {
-                flag = await msg.Submit(cancellationToken);
-            }
-
-            _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
+            _logger.LogInformation("result gid is {0}", gid);
 
             return Ok(TransResponse.BuildSucceedResponse());
         }
@@ -149,12 +141,10 @@ namespace DtmSample.Controllers
 
             using (MySqlConnection conn = GetErrConn())
             {
-                var flag = await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
+                await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
                 {
                     await Task.CompletedTask;
                 });
-
-                _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
             }
 
             return Ok(TransResponse.BuildSucceedResponse());

@@ -32,6 +32,8 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("TransOutTry, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---准备", body.UserId, body.Amount);
+
+            // status code >= 400 || ( status code == 200 && content contains FAILURE)
             //return Ok(TransResponse.BuildFailureResponse());
             return BadRequest();
         }
@@ -98,8 +100,10 @@ namespace DtmSample.Controllers
         {
             _logger.LogInformation("TransOutError, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---正向操作", body.UserId, body.Amount);
+
+            // status code = 409 || content contains FAILURE
             //return Ok(TransResponse.BuildFailureResponse());
-            return BadRequest();
+            return new StatusCodeResult(409);
         }
 
         [HttpPost("TransOutRevert")]

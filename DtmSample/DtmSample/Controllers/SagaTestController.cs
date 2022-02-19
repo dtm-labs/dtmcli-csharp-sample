@@ -43,9 +43,9 @@ namespace DtmSample.Controllers
                 .Add(_settings.BusiUrl + "/TransIn", _settings.BusiUrl + "/TransInRevert", new TransRequest("2", 30))
                 ;
 
-            var flag = await saga.Submit(cancellationToken);
+            await saga.Submit(cancellationToken);
 
-            _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
+            _logger.LogInformation("result gid is {0}", gid);
 
             return Ok(TransResponse.BuildSucceedResponse());
         }
@@ -64,9 +64,9 @@ namespace DtmSample.Controllers
                 .Add(_settings.BusiUrl + "/TransIn", _settings.BusiUrl + "/TransInRevert", new TransRequest("2", 30))
                 ;
 
-            var flag = await saga.Submit(cancellationToken);
+            await saga.Submit(cancellationToken);
 
-            _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
+            _logger.LogInformation("result gid is {0}", gid);
 
             return Ok(TransResponse.BuildSucceedResponse());
         }
@@ -86,9 +86,9 @@ namespace DtmSample.Controllers
                 .EnableWaitResult()
                 ;
 
-            var flag = await saga.Submit(cancellationToken);
+            await saga.Submit(cancellationToken);
 
-            _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
+            _logger.LogInformation("result gid is {0}", gid);
 
             return Ok(TransResponse.BuildSucceedResponse());
         }
@@ -112,9 +112,9 @@ namespace DtmSample.Controllers
                 .AddBranchOrder(3, new List<int> { 0, 1 })
                 ;
 
-            var flag = await saga.Submit(cancellationToken);
+            await saga.Submit(cancellationToken);
 
-            _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
+            _logger.LogInformation("result gid is {0}", gid);
 
             return Ok(TransResponse.BuildSucceedResponse());
         }
@@ -133,9 +133,9 @@ namespace DtmSample.Controllers
                 .Add(_settings.BusiUrl + "/barrierTransInSaga", _settings.BusiUrl + "/barrierTransInSagaRevert", new TransRequest("2", 30))
                 ;
 
-            var flag = await saga.Submit(cancellationToken);
+            await saga.Submit(cancellationToken);
 
-            _logger.LogInformation("result gid is {0}, flag is {1}", gid, flag);
+            _logger.LogInformation("result gid is {0}", gid);
 
             return Ok(TransResponse.BuildSucceedResponse());
         }
