@@ -1,32 +1,35 @@
+English | [简体中文](./README-cn.md)
+
 # dtmcli-csharp-sample
-dtmcli c# 使用示例
+The sample repository of [dtmcli-csharp](https://github.com/dtm-labs/dtmcli-csharp)
 
-# 快速开始
+# Quick start
 
-## 非 docker 用户
+## Non docker user
 
-### 部署启动dtm
+### Deploy and start DTM server
 
-参考 [dtm安装运行](https://dtm.pub/guide/install.html)
+Reference resources [Installation](https://en.dtm.pub/guide/install.html)
 
-### 运行示例
-```
+### Run the sample
+
+```sh
 cd DtmSample
 dotnet run DtmSample.csproj
 ```
 
-这个时候通过浏览器打开 `http://localhost:9090` 会跳转到 swagger 页面，可以选择性的测试对应类型的事务模式。
+Open through browser with this URL `http://localhost:9090 `. It will jump to the swagger page and you can selectively test the corresponding type of transaction mode.
 
-> PS: 为了便于快速体验，示例代码中的数据库是可以直接使用的了。
+> NOTE: In order to facilitate quick experience, the database in the sample code can be used directly.
 
-## docker 用户
+## Docker user
 
-通过执行 `runsample.ps1` 来快速运行示例代码。
+By executing `runsample.ps1` to run the sample code quickly.
 
-它会通过 **docker-compose** 启动 dtm，mysql(演示子事务屏障)，dtmsample
+It will start DTM server, MySQL (demonstration sub transaction barrier) and dtmsample through **docker compose**.
 
-启动后，可以看到类似下面的输出
+After startup, you can see output similar to the following
 
 ![](./media/run.png)
 
-同样的通过浏览器打开 `http://localhost:9090` 会跳转到 swagger 页面，可以选择性的测试对应类型的事务模式。
+Open through browser with this URL `http://localhost:9090 `. It will jump to the swagger page and you can selectively test the corresponding type of transaction mode.
