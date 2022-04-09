@@ -125,29 +125,29 @@ namespace DtmSample.Controllers
             }
         }
 
-        /// <summary>
-        /// MSG DB 回滚
-        /// </summary>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        [HttpPost("msg-db-rb")]
-        public async Task<IActionResult> MsgDbRb(CancellationToken cancellationToken)
-        {
-            var gid = await _dtmClient.GenGid(cancellationToken);
+        ///// <summary>
+        ///// MSG DB 回滚
+        ///// </summary>
+        ///// <param name="cancellationToken"></param>
+        ///// <returns></returns>
+        //[HttpPost("msg-db-rb")]
+        //public async Task<IActionResult> MsgDbRb(CancellationToken cancellationToken)
+        //{
+        //    var gid = await _dtmClient.GenGid(cancellationToken);
 
-            var msg = _transFactory.NewMsg(gid)
-                .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
-                .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
+        //    var msg = _transFactory.NewMsg(gid)
+        //        .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
+        //        .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
 
-            using (MySqlConnection conn = GetErrConn())
-            {
-                await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
-                {
-                    await Task.CompletedTask;
-                });
-            }
+        //    using (MySqlConnection conn = GetErrConn())
+        //    {
+        //        await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
+        //        {
+        //            await Task.CompletedTask;
+        //        });
+        //    }
 
-            return Ok(TransResponse.BuildSucceedResponse());
-        }
+        //    return Ok(TransResponse.BuildSucceedResponse());
+        //}
     }
 }

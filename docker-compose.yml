@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   dtm:
-    image: 'yedf/dtm:1.12'
+    image: 'yedf/dtm:1.13'
     container_name: dtm-csharp
     environment:
       IS_DOCKER: '1'
