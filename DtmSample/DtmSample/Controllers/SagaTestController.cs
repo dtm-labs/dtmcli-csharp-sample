@@ -120,17 +120,38 @@ namespace DtmSample.Controllers
         }
 
         /// <summary>
-        /// SAGA 异常触发子事务屏障
+        /// SAGA 异常触发子事务屏障(mysql)
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPost("saga-barrier")]
-        public async Task<IActionResult> SagaBarrier(CancellationToken cancellationToken)
+        [HttpPost("saga-mysqlbarrier")]
+        public async Task<IActionResult> SagaMySQLBarrier(CancellationToken cancellationToken)
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
             var saga = _transFactory.NewSaga(gid)
                 .Add(_settings.BusiUrl + "/barrierTransOutSaga", _settings.BusiUrl + "/barrierTransOutSagaRevert", new TransRequest("1", -30))
                 .Add(_settings.BusiUrl + "/barrierTransInSaga", _settings.BusiUrl + "/barrierTransInSagaRevert", new TransRequest("2", 30))
+                ;
+
+            await saga.Submit(cancellationToken);
+
+            _logger.LogInformation("result gid is {0}", gid);
+
+            return Ok(TransResponse.BuildSucceedResponse());
+        }
+
+        /// <summary>
+        /// SAGA 异常触发子事务屏障(mongodb)
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPost("saga-mongobarrier")]
+        public async Task<IActionResult> SagaMongoBarrier(CancellationToken cancellationToken)
+        {
+            var gid = await _dtmClient.GenGid(cancellationToken);
+            var saga = _transFactory.NewSaga(gid)
+                .Add(_settings.BusiUrl + "/mg/barrierTransOutSaga", _settings.BusiUrl + "/mg/barrierTransOutSagaRevert", new TransRequest("1", -30))
+                .Add(_settings.BusiUrl + "/mg/barrierTransInSaga", _settings.BusiUrl + "/mg/barrierTransInSagaRevert", new TransRequest("2", 30))
                 ;
 
             await saga.Submit(cancellationToken);

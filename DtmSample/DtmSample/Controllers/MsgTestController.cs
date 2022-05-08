@@ -1,4 +1,5 @@
 ﻿using Dtmcli;
+using DtmMongoBarrier;
 using DtmSample.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -58,12 +59,12 @@ namespace DtmSample.Controllers
         }
 
         /// <summary>
-        /// MSG DB成功
+        /// MSG DoAndSubmitDB (mysql)
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPost("msg-db")]
-        public async Task<IActionResult> MsgDb(CancellationToken cancellationToken)
+        [HttpPost("msg-db-mysql")]
+        public async Task<IActionResult> MsgDbMySql(CancellationToken cancellationToken)
         {
             var gid = await _dtmClient.GenGid(cancellationToken);
 
@@ -85,7 +86,35 @@ namespace DtmSample.Controllers
         }
 
         /// <summary>
-        /// MSG 等待结果
+        /// MSG DoAndSubmit (mongo)
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPost("msg-db-mongo")]
+        public async Task<IActionResult> MsgDbMongo(CancellationToken cancellationToken)
+        {
+            var gid = await _dtmClient.GenGid(cancellationToken);
+
+            var msg = _transFactory.NewMsg(gid)
+                .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
+                .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
+
+            MongoDB.Driver.IMongoClient cli = new MongoDB.Driver.MongoClient(_settings.MongoBarrierConn);
+            await msg.DoAndSubmit(_settings.BusiUrl + "/msg-mongoqueryprepared", async bb => 
+            {
+                await bb.MongoCall(cli, async x => 
+                {
+                    await Task.CompletedTask;
+                });
+            });
+           
+            _logger.LogInformation("result gid is {0}", gid);
+
+            return Ok(TransResponse.BuildSucceedResponse());
+        }
+
+        /// <summary>
+        /// MSG EnableWaitResult
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
@@ -108,15 +137,15 @@ namespace DtmSample.Controllers
         }
 
         /// <summary>
-        /// MSG QueryPrepared
+        /// MSG QueryPrepared(mysql)
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpGet("msg-queryprepared")]
-        public async Task<IActionResult> MsgQueryPrepared(CancellationToken cancellationToken)
+        public async Task<IActionResult> MsgMySqlQueryPrepared(CancellationToken cancellationToken)
         {
             var bb = _factory.CreateBranchBarrier(Request.Query);
-
+            _logger.LogInformation("bb {0}", bb);
             using (MySqlConnection conn = GetConn())
             {
                 var res = await bb.QueryPrepared(conn);
@@ -125,29 +154,20 @@ namespace DtmSample.Controllers
             }
         }
 
-        ///// <summary>
-        ///// MSG DB 回滚
-        ///// </summary>
-        ///// <param name="cancellationToken"></param>
-        ///// <returns></returns>
-        //[HttpPost("msg-db-rb")]
-        //public async Task<IActionResult> MsgDbRb(CancellationToken cancellationToken)
-        //{
-        //    var gid = await _dtmClient.GenGid(cancellationToken);
+        /// <summary>
+        /// MSG QueryPrepared(mongo)
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpGet("msg-mongoqueryprepared")]
+        public async Task<IActionResult> MsgMongoQueryPrepared(CancellationToken cancellationToken)
+        {
+            var bb = _factory.CreateBranchBarrier(Request.Query);
+            _logger.LogInformation("bb {0}", bb);
 
-        //    var msg = _transFactory.NewMsg(gid)
-        //        .Add(_settings.BusiUrl + "/TransOut", new TransRequest("1", -30))
-        //        .Add(_settings.BusiUrl + "/TransIn", new TransRequest("2", 30));
-
-        //    using (MySqlConnection conn = GetErrConn())
-        //    {
-        //        await msg.DoAndSubmitDB(_settings.BusiUrl + "/msg-queryprepared", conn, async tx =>
-        //        {
-        //            await Task.CompletedTask;
-        //        });
-        //    }
-
-        //    return Ok(TransResponse.BuildSucceedResponse());
-        //}
+            MongoDB.Driver.IMongoClient cli = new MongoDB.Driver.MongoClient(_settings.MongoBarrierConn);
+            var res = await bb.MongoQueryPrepared(cli);
+            return Ok(new { dtm_result = res });
+        }
     }
 }

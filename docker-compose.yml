@@ -8,12 +8,11 @@ services:
     ports:
       - '36789:36789'
       - '36790:36790'
-    # command: ['/app/dtm/main', 'dev']
-    # working_dir: /app/work
   sample:
     depends_on:
       - dtm
       - db
+      - mgdb
     build:
       dockerfile: ./docker/sample/Dockerfile
       context: . 
@@ -39,3 +38,12 @@ services:
       - ./docker/mysql/scripts:/docker-entrypoint-initdb.d  
     ports:
       - '3306:3306'
+  mgdb:
+    image: 'yedf/mongo-rs:0.0.3'
+    container_name: dtm-csharp-mongo
+    environment:
+      MONGO_INITDB_DATABASE: dtm_barrier
+    volumes:
+      - ./docker/mongo/dtmcli.barrier.mongo.js:/docker-entrypoint-initdb.d/dtmcli.barrier.mongo.js
+    ports:
+      - '27017:27017'    

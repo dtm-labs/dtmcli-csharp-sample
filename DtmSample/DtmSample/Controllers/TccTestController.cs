@@ -125,11 +125,11 @@ namespace DtmSample.Controllers
         }
 
         /// <summary>
-        /// TCC 异常触发子事务屏障
+        /// TCC 异常触发子事务屏障(mysql)
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        [HttpPost("tcc-barrier")]
+        [HttpPost("tcc-mysqlbarrier")]
         public async Task<IActionResult> TccBarrier(CancellationToken cancellationToken)
         {
             try
@@ -141,6 +141,43 @@ namespace DtmSample.Controllers
 
                     // 用户2 转入30元
                     var res2 = await tcc.CallBranch(new TransRequest("2", 30), _settings.BusiUrl + "/barrierTransInTryError", _settings.BusiUrl + "/barrierTransInConfirm", _settings.BusiUrl + "/barrierTransInCancel", cancellationToken);
+                    _logger.LogInformation($"tcc returns: {res1}-{res2}");
+
+                    // 老版本的需要自己抛异常，新版本会抛出 DtmcliException
+                    // https://github.com/dtm-labs/dtmcli-csharp/issues/10
+                    // ==========================================================
+                    //// 判断转入转出是否成功，不成功，要抛出异常，走 tcc 回滚
+                    //if (!res1.Contains("SUCCESS")) throw new Exception("转出失败了");
+                    //if (!res2.Contains("SUCCESS")) throw new Exception("转入失败了");
+
+                }, cancellationToken);
+
+                return Ok(TransResponse.BuildSucceedResponse());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "TccBarrier Error");
+                return Ok(TransResponse.BuildFailureResponse());
+            }
+        }
+
+        /// <summary>
+        /// TCC 异常触发子事务屏障(mongo)
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpPost("tcc-mongobarrier")]
+        public async Task<IActionResult> TccMongoBarrier(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await _globalTransaction.Excecute(async (tcc) =>
+                {
+                    // 用户1 转出30元
+                    var res1 = await tcc.CallBranch(new TransRequest("1", -30), _settings.BusiUrl + "/mg/barrierTransOutTry", _settings.BusiUrl + "/mg/barrierTransOutConfirm", _settings.BusiUrl + "/mg/barrierTransOutCancel", cancellationToken);
+
+                    // 用户2 转入30元
+                    var res2 = await tcc.CallBranch(new TransRequest("2", 30), _settings.BusiUrl + "/mg/barrierTransInTryError", _settings.BusiUrl + "/mg/barrierTransInConfirm", _settings.BusiUrl + "/mg/barrierTransInCancel", cancellationToken);
                     _logger.LogInformation($"tcc returns: {res1}-{res2}");
 
                     // 老版本的需要自己抛异常，新版本会抛出 DtmcliException
