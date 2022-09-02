@@ -18,8 +18,7 @@ namespace DtmSample.Controllers
 
         #region TCC
         [HttpPost("TransOutTry")]
-        public IActionResult TransOutTry([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransOutTry([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransOutTry, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---准备", body.UserId, body.Amount);
@@ -27,8 +26,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransOutTryError")]
-        public IActionResult TransOutTryError([FromQuery] string gid, [FromQuery] string trans_type,
-          [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransOutTryError([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransOutTry, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---准备", body.UserId, body.Amount);
@@ -39,8 +37,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransOutConfirm")]
-        public IActionResult TransOutConfirm([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransOutConfirm([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransOutConfirm, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---提交", body.UserId, body.Amount);
@@ -48,8 +45,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransOutCancel")]
-        public IActionResult TransOutCancel([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransOutCancel([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransOutCancel, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---回滚", body.UserId, body.Amount);
@@ -57,8 +53,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransInTry")]
-        public IActionResult TransInTry([FromQuery] string gid, [FromQuery] string trans_type,
-            [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransInTry([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransInTry, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转入 {1} 元---准备", body.UserId, body.Amount);
@@ -66,8 +61,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransInConfirm")]
-        public IActionResult TransInConfirm([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransInConfirm([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransInConfirm, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转入 {1} 元---提交", body.UserId, body.Amount);
@@ -75,8 +69,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransInCancel")]
-        public IActionResult TransInCancel([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransInCancel([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransInCancel, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转入 {1} 元---回滚", body.UserId, body.Amount);
@@ -86,8 +79,7 @@ namespace DtmSample.Controllers
 
         #region SAGA
         [HttpPost("TransOut")]
-        public IActionResult TransOut([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransOut([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransOut, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---正向操作", body.UserId, body.Amount);
@@ -95,8 +87,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransOutError")]
-        public IActionResult TransOutError([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransOutError([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransOutError, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---正向操作", body.UserId, body.Amount);
@@ -107,8 +98,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransOutRevert")]
-        public IActionResult TransOutRevert([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransOutRevert([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransOutConfirm, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转出 {1} 元---回滚", body.UserId, body.Amount);
@@ -116,8 +106,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransIn")]
-        public IActionResult TransIn([FromQuery] string gid, [FromQuery] string trans_type,
-            [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransIn([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransInTry, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转入 {1} 元---正向操作", body.UserId, body.Amount);
@@ -125,8 +114,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("TransInRevert")]
-        public IActionResult TransInRevert([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string branch_type, [FromBody] TransRequest body)
+        public IActionResult TransInRevert([FromBody] TransRequest body)
         {
             _logger.LogInformation("TransInConfirm, QueryString={0}", Request.QueryString);
             _logger.LogInformation("用户: {0},转入 {1} 元---回滚", body.UserId, body.Amount);

@@ -28,8 +28,7 @@ namespace DtmSample.Controllers
 
         #region TCC
         [HttpPost("barrierTransOutTry")]
-        public async Task<IActionResult> BarrierTransOutTry([FromQuery] string gid, [FromQuery] string trans_type,
-            [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransOutTry([FromBody] TransRequest body)
         {
             _logger.LogInformation("BarrierTransOutTry, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
@@ -48,8 +47,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransOutConfirm")]
-        public async Task<IActionResult> BarrierTransOutConfirm([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransOutConfirm([FromBody] TransRequest body)
         {
             _logger.LogInformation("BarrierTransOutConfirm, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
@@ -68,8 +66,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransOutCancel")]
-        public async Task<IActionResult> BarrierTransOutCancel([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransOutCancel([FromBody] TransRequest body)
         {
             _logger.LogInformation("BarrierTransOutCancel, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
@@ -88,8 +85,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransInTry")]
-        public async Task<IActionResult> BarrierTransInTry([FromQuery] string gid, [FromQuery] string trans_type,
-            [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransInTry([FromBody] TransRequest body)
         {
             _logger.LogInformation("BarrierTransInTry, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
@@ -108,8 +104,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransInTryError")]
-        public async Task<IActionResult> BarrierTransInTryError([FromQuery] string gid, [FromQuery] string trans_type,
-            [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransInTryError([FromBody] TransRequest body)
         {
             _logger.LogInformation("barrierTransInTryError, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
@@ -128,8 +123,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransInConfirm")]
-        public async Task<IActionResult> BarrierTransInConfirm([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransInConfirm([FromBody] TransRequest body)
         {
             _logger.LogInformation("BarrierTransInConfirm, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
@@ -148,8 +142,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransInCancel")]
-        public async Task<IActionResult> BarrierTransInCancel([FromQuery] string gid, [FromQuery] string trans_type,
-           [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransInCancel([FromBody] TransRequest body)
         {
             _logger.LogInformation("BarrierTransInCancel, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
@@ -170,8 +163,7 @@ namespace DtmSample.Controllers
 
         #region SAGA
         [HttpPost("barrierTransOutSaga")]
-        public async Task<IActionResult> BarrierTransOutSaga([FromQuery] string gid, [FromQuery] string trans_type,
-            [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransOutSaga([FromBody] TransRequest body)
         {
             _logger.LogInformation("barrierTransOutSaga, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
@@ -190,8 +182,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransOutSagaRevert")]
-        public async Task<IActionResult> BarrierTransOutSagaRevert([FromQuery] string gid, [FromQuery] string trans_type,
-          [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransOutSagaRevert([FromBody] TransRequest body)
         {
             _logger.LogInformation("barrierTransOutSagaRevert, QueryString={0}", Request.QueryString);
             
@@ -210,8 +201,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransInSaga")]
-        public async Task<IActionResult> BarrierTransInSaga([FromQuery] string gid, [FromQuery] string trans_type,
-            [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransInSaga([FromBody] TransRequest body)
         {
             _logger.LogInformation("barrierTransInSaga, QueryString={0}", Request.QueryString);
 
@@ -232,8 +222,7 @@ namespace DtmSample.Controllers
         }
 
         [HttpPost("barrierTransInSagaRevert")]
-        public async Task<IActionResult> BarrierTransInSagaRevert([FromQuery] string gid, [FromQuery] string trans_type,
-            [FromQuery] string branch_id, [FromQuery] string op, [FromBody] TransRequest body)
+        public async Task<IActionResult> BarrierTransInSagaRevert([FromBody] TransRequest body)
         {
             _logger.LogInformation("BarrierTransInSagaRevert, QueryString={0}, body={1}", Request.QueryString, body.ToString());
 
