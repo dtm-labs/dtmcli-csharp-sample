@@ -23,10 +23,11 @@ Open through browser with this URL `http://localhost:9090 `. It will jump to the
 > NOTE: In order to facilitate quick experience, the database in the sample code can be used directly.
 
 ## Docker user
+There are two ways to run the sample code quickly:
+1. Run the sample code quickly by executing `runsample.ps1`.
+2. Open Visual Studio, and select `Docker compose` in the toolbar to run it. In this mode, you can debug the project.
 
-By executing `runsample.ps1` to run the sample code quickly.
-
-It will start DTM server, MySQL (demonstration sub transaction barrier) and dtmsample through **docker compose**.
+Both of the above two ways will start DTM server, MySQL (demonstration sub transaction barrier) and dtmsample through **docker compose**.
 
 After startup, you can see output similar to the following
 
