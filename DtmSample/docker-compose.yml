@@ -1,28 +1,5 @@
 version: '3.3'
 services:
-  dtm:
-    image: 'yedf/dtm:1.13'
-    container_name: dtm-csharp
-    environment:
-      IS_DOCKER: '1'
-    ports:
-      - '36789:36789'
-      - '36790:36790'
-  sample:
-    depends_on:
-      - dtm
-      - db
-      - mgdb
-    build:
-      dockerfile: ./docker/sample/Dockerfile
-      context: . 
-    image: sample:1.0.0
-    container_name: dtm-csharp-sample
-    ports:
-      - "9090:9090"  
-    environment:
-      ASPNETCORE_ENVIRONMENT: docker  
-      Logging__Console__FormatterName:
   db:
     image: 'mysql:8'
     container_name: dtm-csharp-mysql
@@ -38,6 +15,35 @@ services:
       - ./docker/mysql/scripts:/docker-entrypoint-initdb.d  
     ports:
       - '3306:3306'
+  dtm:
+    depends_on:
+      - db
+    image: 'yedf/dtm:latest'
+    container_name: dtm-csharp
+    environment:
+      IS_DOCKER: '1'
+      STORE_DRIVER: mysql
+      STORE_HOST: db
+      STORE_USER: root
+      STORE_PASSWORD: '123456'
+      STORE_PORT: 3306      
+      STORE_DB: "dtm"
+    ports:
+      - '36789:36789'
+      - '36790:36790'
+  sample:
+    depends_on:
+      - dtm
+      - db
+    build:
+      dockerfile: ./DtmSample/Dockerfile
+      context: . 
+    container_name: dtm-csharp-sample
+    ports:
+      - "9090:9090"  
+    environment:
+      ASPNETCORE_ENVIRONMENT: docker  
+      Logging__Console__FormatterName:
   mgdb:
     image: 'yedf/mongo-rs:0.0.3'
     container_name: dtm-csharp-mongo

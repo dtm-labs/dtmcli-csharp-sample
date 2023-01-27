@@ -22,10 +22,11 @@ dotnet run DtmSample.csproj
 > PS: 为了便于快速体验，示例代码中的数据库是可以直接使用的了。
 
 ## docker 用户
+有两种方式快速运行示例代码：
+1. 通过执行 `runsample.ps1` 来快速运行示例代码。
+2. 打开Visual Studio，在工具栏选择`Docker Compose` 运行，该模式下可以进行端点调试。
 
-通过执行 `runsample.ps1` 来快速运行示例代码。
-
-它会通过 **docker-compose** 启动 dtm，mysql(演示子事务屏障)，dtmsample
+以上两种方式会通过 **docker-compose** 启动 dtm，mysql(演示子事务屏障)，dtmsample。
 
 启动后，可以看到类似下面的输出
 

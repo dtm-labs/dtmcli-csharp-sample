@@ -1,1 +1,1 @@
-docker-compose up --build --force-recreate
+docker-compose -f ./DtmSample/docker-compose.yml up --build --force-recreate

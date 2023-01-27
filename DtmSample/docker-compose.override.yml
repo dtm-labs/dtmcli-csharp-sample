@@ -1,0 +1,55 @@
+version: '3.3'
+services:
+  db:
+    image: 'mysql:8'
+    container_name: dtm-csharp-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+    command:
+      [
+        '--character-set-server=utf8mb4',
+        '--collation-server=utf8mb4_unicode_ci',
+        '--default-authentication-plugin=mysql_native_password',
+      ]
+    volumes:
+      - ./docker/mysql/scripts:/docker-entrypoint-initdb.d  
+    ports:
+      - '3306:3306'
+  dtm:
+    depends_on:
+      - db
+    image: 'yedf/dtm:latest'
+    container_name: dtm-csharp
+    environment:
+      IS_DOCKER: '1'
+      STORE_DRIVER: mysql
+      STORE_HOST: db
+      STORE_USER: root
+      STORE_PASSWORD: '123456'
+      STORE_PORT: 3306
+      STORE_DB: "dtm"
+    ports:
+      - '36789:36789'
+      - '36790:36790'
+  sample:
+    depends_on:
+      - dtm
+      - db
+    build:
+      dockerfile: ./DtmSample/Dockerfile
+      context: . 
+    container_name: dtm-csharp-sample
+    ports:
+      - "9090:9090"  
+    environment:
+      ASPNETCORE_ENVIRONMENT: docker  
+      Logging__Console__FormatterName:
+  mgdb:
+    image: 'yedf/mongo-rs:0.0.3'
+    container_name: dtm-csharp-mongo
+    environment:
+      MONGO_INITDB_DATABASE: dtm_barrier
+    volumes:
+      - ./docker/mongo/dtmcli.barrier.mongo.js:/docker-entrypoint-initdb.d/dtmcli.barrier.mongo.js
+    ports:
+      - '27017:27017'    
