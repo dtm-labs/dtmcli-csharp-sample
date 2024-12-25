@@ -3,6 +3,8 @@
 # dtmcli-csharp-sample
 dtmcli c# 使用示例
 
+**已废弃, 合并到了 [client-csharp/samples · dtm-labs/client-csharp](https://github.com/dtm-labs/client-csharp/tree/main/samples)**
+
 # 快速开始
 
 ## 非 docker 用户
