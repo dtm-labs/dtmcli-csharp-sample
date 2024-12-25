@@ -3,6 +3,8 @@ English | [简体中文](./README-cn.md)
 # dtmcli-csharp-sample
 The sample repository of [dtmcli-csharp](https://github.com/dtm-labs/dtmcli-csharp)
 
+**Deprecated, please refer to [client-csharp/samples · dtm-labs/client-csharp](https://github.com/dtm-labs/client-csharp/tree/main/samples)**
+
 # Quick start
 
 ## Non docker user
